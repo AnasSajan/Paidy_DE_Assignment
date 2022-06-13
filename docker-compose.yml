@@ -1,0 +1,21 @@
+version: '2'
+services:
+  postgres:
+    container_name: postgres
+    image: "postgres:12.4"
+    ports:
+      - '5463:5432'
+    volumes:
+      - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    environment:
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DATABASE=my_database
+      - ALLOW_EMPTY_PASSWORD=yes
+
+
+
+
+
+
+
