@@ -85,7 +85,7 @@ if not os.path.exists(pre_load_folder):
 df.to_csv(pre_load_filename, index=False)
 
 # load data into postgres
-table = 'LOAN_APPLICATION'
+table = 'P_LOAN_APPLICATION'
 sql = """COPY {table}(SERIOUS_DLQ_2, REVOLVING_UTILIZATION, AGE, PAST_DUE_DAYS_30_59,DEBT_RATIO,MONTHLY_INCOME,OPEN_CREDIT_LINES_AND_LOANS,PLUS_DAYS_LATE_90,REAL_ESTATE_LOANS_OR_LINES,PAST_DUE_DAYS_60_89,NUMBER_OF_DEPENDENTS,CREATED_TS) FROM STDIN WITH (DELIMITER '{sep}', NULL '', FORMAT CSV, HEADER True);""".format(table=table, sep=',')
 cur = conn.cursor()
 try:
@@ -97,12 +97,13 @@ try:
             os.mkdir(target_folder)
         df.to_csv(tgt_filename, index=False)
         print(f'loaded data in file {tgt_filename}')
-        print("Table load completed successfully")
+        print(f'Data loaded in table {table} successfully')
 except (Exception, psycopg2.DatabaseError) as error:
     if not os.path.exists(target_folder_archive):
         os.mkdir(target_folder_archive)
     df.to_csv(tgt_archived_filename, index=False)
     print("Error: %s" % error)
-    print(f'Please check {tgt_archived_filename} for more details..')
+    print(
+        f'Failed to Load!..Please check {tgt_archived_filename} for more details..')
     cur.execute("ROLLBACK")
     cur.close()
