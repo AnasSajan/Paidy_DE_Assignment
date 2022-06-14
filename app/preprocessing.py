@@ -6,7 +6,7 @@ import os
 import csv
 import sys
 
-# connection details
+# connection details to postgres
 param_dic = {
     "host": "localhost",
     "dbname": "postgres",
@@ -97,13 +97,12 @@ try:
             os.mkdir(target_folder)
         df.to_csv(tgt_filename, index=False)
         print(f'loaded data in file {tgt_filename}')
-        print(f'Data loaded in table {table} successfully')
+        print(f'Data Ingested in table {table} successfully')
 except (Exception, psycopg2.DatabaseError) as error:
     if not os.path.exists(target_folder_archive):
         os.mkdir(target_folder_archive)
     df.to_csv(tgt_archived_filename, index=False)
     print("Error: %s" % error)
-    print(
-        f'Failed to Load!..Please check {tgt_archived_filename} for more details..')
+    print(f'Failed to Load!..Please check {tgt_archived_filename} for more details..')
     cur.execute("ROLLBACK")
     cur.close()
