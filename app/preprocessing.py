@@ -68,7 +68,7 @@ df.rename(columns={'SeriousDlqin2yrs': 'serious_dlq_2', 'RevolvingUtilizationOfU
                    'MonthlyIncome': 'monthly_income', 'NumberOfOpenCreditLinesAndLoans': 'open_credit_lines_and_loans', 'NumberOfTimes90DaysLate': '90_days_late', 'NumberRealEstateLoansOrLines': 'real_estate_loans_or_lines', 'NumberOfDependents': 'number_of_dependents'}, inplace=True)
 
 # metadata column
-df['created_ts'] = dt.datetime.now()
+df['created_ts'] = dt.datetime.now().strftime('%m-%d-%Y %H:%M:%S')
 
 # loading data into csv
 target_folder = dt.datetime.now().strftime('data/target/%m%Y')
