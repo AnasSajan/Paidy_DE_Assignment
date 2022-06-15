@@ -5,6 +5,9 @@ import datetime as dt
 import os
 import csv
 import sys
+import shutil
+from zipfile import ZipFile
+
 
 # connection details to postgres
 param_dic = {
@@ -34,6 +37,9 @@ def connect(params_dic):
 
 conn = connect(param_dic)
 
+
+zip_name = dt.datetime.now().strftime('srcdata_%m%d%Y.csv')
+zip_archieve = dt.datetime.now().strftime('srcdata_%m%d%Y')
 # read source file
 src_filename = dt.datetime.now().strftime('data/source/srcdata_%m%d%Y.csv')
 print(f"Reading file...{src_filename}")
@@ -72,14 +78,25 @@ df['created_ts'] = dt.datetime.now().strftime('%m-%d-%Y %H:%M:%S')
 
 # loading data into csv
 target_folder = dt.datetime.now().strftime('data/target/%m%Y')
+
 target_folder_archive = dt.datetime.now().strftime('data/archive/%m%Y')
+
+target_folder_failed = dt.datetime.now().strftime('data/failed/%m%Y')
+
 pre_load_folder = dt.datetime.now().strftime('data/preload/%m%Y')
+
 tgt_filename = dt.datetime.now().strftime(
     f'{target_folder}/tgtdata_%m%d%Y.csv')
+
 tgt_archived_filename = dt.datetime.now().strftime(
     f'{target_folder_archive}/tgtdata_%m%d%Y.csv')
+
 pre_load_filename = dt.datetime.now().strftime(
     f'{pre_load_folder}/preload_data_%m%d%Y.csv')
+
+failed_filename = dt.datetime.now().strftime(
+    f'{target_folder_failed}/failed_%m%d%Y.csv')
+
 if not os.path.exists(pre_load_folder):
     os.mkdir(pre_load_folder)
 df.to_csv(pre_load_filename, index=False)
@@ -98,11 +115,24 @@ try:
         df.to_csv(tgt_filename, index=False)
         print(f'loaded data in file {tgt_filename}')
         print(f'Data Ingested in table {table} successfully')
+        # zip source file on success and send into archives
+        print(f"zipping source file {src_filename} and moving to archieve....")
+        if not os.path.exists(target_folder_archive):
+            os.mkdir(target_folder_archive)
+        shutil.make_archive(src_filename, 'zip', target_folder_archive)
+        shutil.move(f"{src_filename}.zip",
+                    f"{target_folder_archive}/{zip_archieve}.zip")
+        print(f"Moved file to {target_folder_archive} as {zip_archieve}.zip")
+        print("Removing source file..")
+        os.remove(src_filename)
+        print("Successful!!")
+
 except (Exception, psycopg2.DatabaseError) as error:
     if not os.path.exists(target_folder_archive):
         os.mkdir(target_folder_archive)
-    df.to_csv(tgt_archived_filename, index=False)
+    df.to_csv(failed_filename, index=False)
     print("Error: %s" % error)
-    print(f'Failed to Load!..Please check {tgt_archived_filename} for more details..')
+    print(
+        f'Failed to Load!..Please check {failed_filename} for more details..')
     cur.execute("ROLLBACK")
     cur.close()
