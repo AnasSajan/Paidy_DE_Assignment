@@ -39,7 +39,7 @@ conn = connect(param_dic)
 
 
 zip_name = dt.datetime.now().strftime('srcdata_%m%d%Y.csv')
-zip_archieve = dt.datetime.now().strftime('srcdata_%m%d%Y')
+zip_archive = dt.datetime.now().strftime('srcdata_%m%d%Y')
 # read source file
 src_filename = dt.datetime.now().strftime('data/source/srcdata_%m%d%Y.csv')
 print(f"Reading file...{src_filename}")
@@ -116,23 +116,29 @@ try:
         print(f'loaded data in file {tgt_filename}')
         print(f'Data Ingested in table {table} successfully')
         # zip source file on success and send into archives
-        print(f"zipping source file {src_filename} and moving to archieve....")
+        print(f"zipping source file {src_filename} ....")
+        print("Moving to Achrives...")
         if not os.path.exists(target_folder_archive):
             os.mkdir(target_folder_archive)
         shutil.make_archive(src_filename, 'zip', target_folder_archive)
         shutil.move(f"{src_filename}.zip",
-                    f"{target_folder_archive}/{zip_archieve}.zip")
-        print(f"Moved file to {target_folder_archive} as {zip_archieve}.zip")
+                    f"{target_folder_archive}/{zip_archive}.zip")
+        print(f"Moved file to {target_folder_archive} as {zip_archive}.zip")
         print("Removing source file..")
         os.remove(src_filename)
-        print("Successful!!")
-
+        print("Removed..")
+    print("Removing preload file..")
+    os.remove(pre_load_filename)
+    print("Successful!!")
 except (Exception, psycopg2.DatabaseError) as error:
-    if not os.path.exists(target_folder_archive):
-        os.mkdir(target_folder_archive)
+    if not os.path.exists(target_folder_failed):
+        os.mkdir(target_folder_failed)
     df.to_csv(failed_filename, index=False)
     print("Error: %s" % error)
     print(
         f'Failed to Load!..Please check {failed_filename} for more details..')
+    print("Removing preload file..")
+    os.remove(pre_load_filename)
+    print("Removed..")
     cur.execute("ROLLBACK")
     cur.close()
