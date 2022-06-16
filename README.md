@@ -41,7 +41,11 @@ Go to the source folder from the root directory to get the source file ready
 Please rename the postfix of the file to the present date in the format MMDDYYYY.
 The script would pick up the file based on the date
 
-Example :  srcdata_06142022 -> srcdata_**06152022**(today's date)
+Example :  srcdata_06172022 -> srcdata_**06182022**(today's date)
+
+```bash
+mv srcdata_06172022.csv srcdata_MMDDYYYY.csv
+```
 
 **Important**: The script zips the source file, moves it to archives and removes it from the folder after it runs successfully. Please copy the source file and store it locally before runnning the job in order to not go to the archives to fetch it if you want to run it the second time. 
 
@@ -77,6 +81,12 @@ Navigate to the app folder and run script :
 
  # run the script
   python preprocessing.py
+```
+
+Run the query in the PostgreSQL database to view the data :
+
+```bash
+ select * from P_LOAN_APPLICATION
 ```
 
 
@@ -119,9 +129,9 @@ Please follow the below steps in order to ingest the received files to the datab
    **Error handling**:  
    A notification or an alert would be sent to the team in all the scenarios if our job fails
 
-## File format :
+## File format and Table name :
 - The incoming source file is assumed to be recieved with a format ``` srcdata_MMDDYYY.csv``` and the target file is generated with ``` tgtdata_MMDDYYY.csv```
-
+- I named the target table as P_LOAN_APPLICATION
 
 
 
