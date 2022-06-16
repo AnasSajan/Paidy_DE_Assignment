@@ -74,7 +74,7 @@ Login to the PostgreSQL server with any tool of your choice using:
   port: 5463
 ```
 
-Navigate to the app folder and run script :
+Navigate to the app folder from the root directory and run script :
 
 ```bash
  # go to app folder
