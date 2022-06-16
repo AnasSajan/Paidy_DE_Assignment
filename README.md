@@ -175,7 +175,7 @@ The script picks up the file from the source folder with the format ``` srcdata_
 
 # Shortcuts
 
-## Excluded some good coding pracitces:
+## Excluded some good coding practices:
 - Used a single .py file to integerate the complete script including connection details and transformations. Having different files for each task makes it more clean and easy to understand
 - Prameter file not created to initialize the connection details and assign values to variables used in the code. This can be very useful when there is a change in connection or a variable and we would not have to navigate to the code to find and change it 
 - Left out the use of functions. Each task can have functions and can be called in the main file. We could call the function and pass the values when there are repetive tasks. This saves space and run time and improves effeciency of the code.  
