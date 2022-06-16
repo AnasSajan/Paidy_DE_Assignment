@@ -60,7 +60,7 @@ Start PostgreSQL and run sql script using:
     docker compose up --build -d
 ```
 
-Login to the PostgreSQL server with any tool of your choice with:
+Login to the PostgreSQL server with any tool of your choice using:
 ```
   host: localhost
   dbname: postgres
@@ -99,7 +99,7 @@ Please follow the below steps in order to ingest the received files to the datab
   ```*/2 * * * * /Users/anassajan/.pyenv/shims/python3 /Users/anassajan/desktop/Paidy_DE_Assignment/app/preprocessing.py 1>> /Users/anassajan/desktop/Paidy_DE_Assignment/log/log.txt 2>> /Users/anassajan/desktop/Paidy_DE_Assignment/log/error.txt```
 
 
-*Point the path of the output file to the log folder in the root directory. This would log all the information and error messsages in to the files in the path.*
+*Point the path of the output file to the log folder in the root directory. This would log all the information and error messsages into the files inside the path.*
 *For the sake of this assignment, we could make it run every two minutes so that we dont have to wait for a long time for the results.*
 
 - Remove the cron file after the job succeeds
