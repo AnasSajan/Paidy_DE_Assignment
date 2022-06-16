@@ -41,13 +41,18 @@ Go to the source folder from the root directory to get the source file ready
 Please rename the postfix of the file to the present date in the format MMDDYYYY.
 The script would pick up the file based on the date
 
-Example :  srcdata_06142022 -> srcdata_**06152022**(today's date)
+Example :  srcdata_06172022 -> srcdata_**06182022**(today's date)
+
+Rename the file using: 
+```bash
+mv srcdata_06172022.csv srcdata_MMDDYYYY.csv
+```
 
 **Important**: The script zips the source file, moves it to archives and removes it from the folder after it runs successfully. Please copy the source file and store it locally before runnning the job in order to not go to the archives to fetch it if you want to run it the second time. 
 
 **Error handling** : The script would throw an error if the source file is not present in the required format. Please make sure you add the file before running it. 
 
-**Executing other day's file**: To execute any other day's file, we would have to go to the code and change the date of the file. I would have created a parameter file in an actual production environment, but I did not implement the approach due to time constraints.
+**Executing other day's file**: To execute any other day's file, we would have to go to the code and manually set the date. I would have created a parameter file in an actual production environment, but I could not implement the approach due to time constraints.
 
 ## Data Ingestion 
 
@@ -55,7 +60,7 @@ Start PostgreSQL and run sql script using:
 
 
 ```
-  # go to the root folder of the project
+  # go to the root folder of the project and execute the command
     
     docker compose up --build -d
 ```
@@ -79,6 +84,12 @@ Navigate to the app folder from the root directory and run script :
   python preprocessing.py
 ```
 
+Run the query in the PostgreSQL database to view the data :
+
+```bash
+ select * from P_LOAN_APPLICATION
+```
+
 
 
 
@@ -96,7 +107,7 @@ Please follow the below steps in order to ingest the received files to the datab
 
 * Please use the following as reference
 
-  ```bash
+  ```
   */2 * * * * /Users/anassajan/.pyenv/shims/python3 /Users/anassajan/desktop/Paidy_DE_Assignment/app/preprocessing.py 1>> /Users/anassajan/desktop/Paidy_DE_Assignment/log/log.txt 2>> /Users/anassajan/desktop/Paidy_DE_Assignment/log/error.txt
   ```
 
@@ -121,9 +132,9 @@ Please follow the below steps in order to ingest the received files to the datab
    **Error handling**:  
    A notification or an alert would be sent to the team in all the scenarios if our job fails
 
-## File format :
+## File format and Table name :
 - The incoming source file is assumed to be recieved with a format ``` srcdata_MMDDYYY.csv``` and the target file is generated with ``` tgtdata_MMDDYYY.csv```
-
+- I named the target table as P_LOAN_APPLICATION
 
 
 
@@ -166,7 +177,7 @@ The script picks up the file from the source folder with the format ``` srcdata_
 
 # Shortcuts
 
-## Excluded some good coding pracitces:
+## Excluded some good coding practices:
 - Used a single .py file to integerate the complete script including connection details and transformations. Having different files for each task makes it more clean and easy to understand
 - Prameter file not created to initialize the connection details and assign values to variables used in the code. This can be very useful when there is a change in connection or a variable and we would not have to navigate to the code to find and change it 
 - Left out the use of functions. Each task can have functions and can be called in the main file. We could call the function and pass the values when there are repetive tasks. This saves space and run time and improves effeciency of the code.  
