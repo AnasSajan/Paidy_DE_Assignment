@@ -43,6 +43,7 @@ The script would pick up the file based on the date
 
 Example :  srcdata_06172022 -> srcdata_**06182022**(today's date)
 
+Rename the file using: 
 ```bash
 mv srcdata_06172022.csv srcdata_MMDDYYYY.csv
 ```
