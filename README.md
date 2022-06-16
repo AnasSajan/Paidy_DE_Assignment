@@ -183,7 +183,7 @@ The script picks up the file from the source folder with the format ``` srcdata_
 - Left out the use of functions. Each task can have functions and can be called in the main file. We could call the function and pass the values when there are repetive tasks. This saves space and run time and improves effeciency of the code.  
 
 ## Job Scheduling:
-- I did not use a monitoring sevice to monitor and view the output of the jobs schedued due to time constraints and Cron's limitations. In a production environment, I would have the job schedued on a cloud services like AWS and use a monitoring service and send out notifications to the team if the job fails 
+- I did not use a monitoring sevice to monitor and view the output of the jobs schedued due to time constraints and Cron's limitations. In a production environment, I would have the job scheduled on a cloud services like AWS and used a monitoring service like Datadog and send out notifications to the team if the job fails 
 
 ## Staging the Data:
 
