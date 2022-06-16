@@ -76,27 +76,22 @@ df.rename(columns={'SeriousDlqin2yrs': 'serious_dlq_2', 'RevolvingUtilizationOfU
 # metadata column
 df['created_ts'] = dt.datetime.now().strftime('%m-%d-%Y %H:%M:%S')
 
-# loading data into csv
+
+# initializing filenames and folders
 target_folder = dt.datetime.now().strftime('data/target/%m%Y')
-
 target_folder_archive = dt.datetime.now().strftime('data/archive/%m%Y')
-
 target_folder_failed = dt.datetime.now().strftime('data/failed/%m%Y')
-
 pre_load_folder = dt.datetime.now().strftime('data/preload/%m%Y')
-
 tgt_filename = dt.datetime.now().strftime(
     f'{target_folder}/tgtdata_%m%d%Y.csv')
-
 tgt_archived_filename = dt.datetime.now().strftime(
     f'{target_folder_archive}/tgtdata_%m%d%Y.csv')
-
 pre_load_filename = dt.datetime.now().strftime(
     f'{pre_load_folder}/preload_data_%m%d%Y.csv')
-
 failed_filename = dt.datetime.now().strftime(
     f'{target_folder_failed}/failed_%m%d%Y.csv')
 
+# preloading data into csv
 if not os.path.exists(pre_load_folder):
     os.mkdir(pre_load_folder)
 df.to_csv(pre_load_filename, index=False)
@@ -115,7 +110,7 @@ try:
         df.to_csv(tgt_filename, index=False)
         print(f'loaded data in file {tgt_filename}')
         print(f'Data Ingested in table {table} successfully')
-        # zip source file on success and send into archives
+        # zipping source file  and send into archives
         print(f"zipping source file {src_filename} ....")
         print("Moving to Achrives...")
         if not os.path.exists(target_folder_archive):
