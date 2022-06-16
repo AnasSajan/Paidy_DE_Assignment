@@ -43,7 +43,12 @@ zip_archive = dt.datetime.now().strftime('srcdata_%m%d%Y')
 # read source file
 src_filename = dt.datetime.now().strftime('data/source/srcdata_%m%d%Y.csv')
 print(f"Reading file...{src_filename}")
-df = pd.read_csv(src_filename)
+try:
+    df = pd.read_csv(src_filename)
+except Exception as error:
+    print(f"{src_filename} file is not present in app/data/source/ ..Please add the file..")
+    sys.exit(1)
+
 
 print("transforming data..")
 # drop column
@@ -70,6 +75,8 @@ df['RevolvingUtilizationOfUnsecuredLines'] = df['RevolvingUtilizationOfUnsecured
 # days late column business logic
 df.loc[(df['NumberOfTime60-89DaysPastDueNotWorse'] + df['NumberOfTime30-59DaysPastDueNotWorse']
         ).gt(24), ['NumberOfTime60-89DaysPastDueNotWorse', 'NumberOfTime30-59DaysPastDueNotWorse']] = ''
+
+# rename columns
 df.rename(columns={'SeriousDlqin2yrs': 'serious_dlq_2', 'RevolvingUtilizationOfUnsecuredLines': 'revolving_utilization', 'DebtRatio': 'debt_ratio', 'NumberOfTime30-59DaysPastDueNotWorse': 'past_due_days_30-59', 'NumberOfTime60-89DaysPastDueNotWorse': 'past_due_days_60-89',
                    'MonthlyIncome': 'monthly_income', 'NumberOfOpenCreditLinesAndLoans': 'open_credit_lines_and_loans', 'NumberOfTimes90DaysLate': '90_days_late', 'NumberRealEstateLoansOrLines': 'real_estate_loans_or_lines', 'NumberOfDependents': 'number_of_dependents'}, inplace=True)
 
